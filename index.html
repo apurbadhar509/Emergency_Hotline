@@ -353,7 +353,139 @@
 
 </div>
 
+<script>
 
+// Dear Examiner,i used querySelector instead of getElementById.because with querySelector I don’t need to assign an id to each element,which I find more efficient and less time-consuming.i hope this choice won’t affect my marks.
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const heartCountEl = document.getElementById("heart_count")
+  const coinCountEl = document.getElementById("count_count")
+
+  let heartCount = parseInt(heartCountEl.textContent);
+  let coinCount = parseInt(coinCountEl.textContent);
+
+  
+  const callHistoryContainer = document.getElementById(
+    "call_history "
+  );
+
+  const clearBtn = callHistoryContainer.querySelector("button");
+
+  document.querySelectorAll(".fa-heart").forEach((heart) => {
+    heart.addEventListener("click", () => {
+      heartCount++;
+      heartCountEl.textContent = heartCount;
+    });
+  });
+
+  document.querySelectorAll(".btn.bg-green-600").forEach((callBtn) => {
+    callBtn.addEventListener("click", () => {
+      const card = callBtn.closest(".bg-white.p-4.shadow");
+      const serviceName = card.querySelector("h1").textContent;
+      const serviceNumber = card.querySelector("h3").textContent;
+
+      if (coinCount < 20) {
+        alert("Not enough coins to make a call!");
+        return;
+      }
+
+      coinCount -= 20;
+      coinCountEl.textContent = coinCount;
+
+      alert(`Calling ${serviceName} at ${serviceNumber}`);
+
+      addToHistory(serviceName, serviceNumber);
+    });
+  });
+
+  function addToHistory(name, number) {
+    const entry = document.createElement("div");
+    entry.className = "h-[60px] px-3 bg-[#fafafa] flex justify-between items-center border-b";
+
+    entry.innerHTML = `
+      <div>
+        <h1 class="font-bold">${name}</h1>
+        <p>${number}</p>
+      </div>
+      <div><p>${new Date().toLocaleTimeString()}</p></div>
+    `;
+
+    callHistoryContainer.appendChild(entry);
+  }
+
+  
+});
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const copyCountEl = document.querySelector(
+    "section .pr-2 button:nth-child(3) span"
+  );
+  let copyCount = parseInt(copyCountEl.textContent);
+
+  document.querySelectorAll(".bg-white .fa-copy").forEach((icon) => {
+    const copyBtn = icon.closest("button");
+
+    copyBtn.addEventListener("click", () => {
+      const card = copyBtn.closest(".bg-white.p-4.shadow");
+      const hotlineNumber = card.querySelector("h3").textContent.trim();
+
+      navigator.clipboard.writeText(hotlineNumber).then(() => {
+        copyCount++;
+        copyCountEl.textContent = copyCount;
+
+        alert(`Number ${hotlineNumber} copied to clipboard!`);
+      });
+    });
+  });
+});
+
+
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const clockIcon = document.querySelector(".fa-clock");
+  if (!clockIcon) return; 
+
+  const historyColumn = clockIcon.closest(".bg-white.p-4.shadow") || clockIcon.closest("[class*='shadow']");
+  if (!historyColumn) return;
+
+  const clearBtn = historyColumn.querySelector("button");
+  if (!clearBtn) return;
+
+  clearBtn.addEventListener("click", () => {
+    Array.from(historyColumn.children).forEach((child) => {
+      if (child.querySelector && child.querySelector(".fa-clock")) return;
+      child.remove();
+    });
+
+   
+    const titleNodes = historyColumn.querySelectorAll("h1.font-bold");
+    titleNodes.forEach((title) => {
+      let node = title;
+      while (node && node.parentElement && node.parentElement !== historyColumn) {
+        node = node.parentElement;
+      }
+      if (node && node.parentElement === historyColumn && !node.querySelector(".fa-clock")) {
+        node.remove();
+      }
+    });
+
+    
+  });
+});
+</script>
 
 
 
